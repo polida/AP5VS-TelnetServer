@@ -22,7 +22,6 @@ public class App {
 
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(max_threads);
-            executor.prestartAllCoreThreads();
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();

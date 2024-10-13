@@ -13,19 +13,20 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
-                String inputLine = in.readLine();
-                if (inputLine == null) {
-                    Thread.sleep(1000);
-                    continue;
-                }
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
+
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
                 out.println(inputLine);
-
-            } catch (IOException | InterruptedException e) {
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
